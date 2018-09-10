@@ -5,17 +5,6 @@
 #include <iostream>
 
 
-class Node {
-public:
-    Node *_parrent = nullptr;
-    Node *_childA = nullptr;
-    Node *_childB = nullptr;
-    int _data;
-
-
-};
-
-
 class BinTree {
 public:
     int *_nodes;
@@ -38,10 +27,7 @@ public:
             return result;
         }
     }
-
-    int get_parent(int i) {
-        return (i - 1) / 2;
-    }
+    
 
     explicit BinTree(int size) {
         _size = size;
@@ -53,11 +39,12 @@ public:
             std::cin >> _nodes[i];
         }
     }
+
     void print() {
         for (int i(0); i < _size; ++i) {
-            std::cout << _nodes[i]<<" ";
+            std::cout << _nodes[i] << " ";
         }
-        std::cout<<std::endl;
+        std::cout << std::endl;
     }
 
     void process(int i) {
