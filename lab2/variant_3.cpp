@@ -4,65 +4,90 @@
 
 #include <iostream>
 
-
-class BinTree {
+class Alhpa {
 public:
-    int *_nodes;
-    int _size;
-
-    int get_left(int i) {
-        int result = 2 * i + 1;
-        if (result >= _size) {
-            return NULL;
-        } else {
-            return result;
-        }
-    }
-
-    int get_right(int i) {
-        int result = 2 * i + 2;
-        if (result >= _size) {
-            return NULL;
-        } else {
-            return result;
-        }
-    }
-    
-
-    explicit BinTree(int size) {
-        _size = size;
-        _nodes = new int[_size];
-    }
-
-    void input() {
-        for (int i(0); i < _size; ++i) {
-            std::cin >> _nodes[i];
-        }
-    }
-
-    void print() {
-        for (int i(0); i < _size; ++i) {
-            std::cout << _nodes[i] << " ";
-        }
-        std::cout << std::endl;
-    }
-
-    void process(int i) {
-        if (get_left(i) && get_right(i)) {
-            process(get_right(i));
-            process(get_left(i));
-            _nodes[i] = _nodes[get_left(i)] + _nodes[get_right(i)];
-        }
-
-    }
-
+    int abc;
 };
+
+void quickSort(int *arr, int left, int right) {
+    if (right - left + 1 > 3) {
+        int i = left, j = right;
+        int tmp;
+        int pivot = arr[(left + right) / 2];
+
+        /* partition */
+        while (i <= j) {
+            while (arr[i] < pivot)
+                i++;
+            while (arr[j] > pivot)
+                j--;
+            if (i <= j) {
+                tmp = arr[i];
+                arr[i] = arr[j];
+                arr[j] = tmp;
+                i++;
+                j--;
+            }
+        };
+
+        /* recursion */
+        if (left < j)
+            quickSort(arr, left, j);
+        if (i < right)
+            quickSort(arr, i, right);
+    }
+}
 
 
 int main() {
-    BinTree a(5);
-    a.input();
-    a.process(0);
-    a.print();
+//
+//    int n;
+//    std::cin >> n;
+//    int *a = new int[n];
+//    for (int i(0); i < n; ++i) {
+//        std::cin >> a[i];
+//    }
+//
+//    quickSort(a, 0, n - 1);
+//
+//    for (int i(0); i < n; ++i) {
+//        std::cout << a[i] << " ";
+//        if ((i + 1) % 3 == 0) {
+//            std::cout << "| ";
+//        }
+//    }
+//    std::cout << std::endl;
+//    std::cout << std::endl;
+//
+//    for (int j(0); j < 2; ++j) {
+//        for (int i = 0; i < n - 1; i++) {
+//            if (a[i] > a[i + 1]) {
+//                std::swap(a[i], a[i + 1]);
+//            }
+//
+//        }
+//        for (int i(0); i < n; ++i) {
+//            std::cout << a[i] << " ";
+//            if ((i + 1) % 3 == 0) {
+//                std::cout << "| ";
+//            }
+//        }
+//        std::cout << std::endl;
+//    }
+
+    int aaa = 4;
+    std::cout << (aaa << 3);
 
 }
+
+
+class Y {
+public:
+    int fooY() { return 5; }
+};
+
+class X {
+    Y y1;
+public:
+    int fooX() { return y1.fooY(); }
+};

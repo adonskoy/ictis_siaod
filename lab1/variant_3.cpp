@@ -12,8 +12,6 @@ public:
     T _data;
 
 
-
-
 };
 
 template<class T>
@@ -47,8 +45,6 @@ public:
                 if (current->_next == nullptr) {
                     current->_next = newNode;
                     current->_next->_prev = current;
-
-
                     break;
                 }
                 current = current->_next;
@@ -170,6 +166,8 @@ public:
 int main() {
 
     List<int> myList;
+//    List<char> myList2;
+
     myList.push_back(1);
     myList.push_back(1);
 

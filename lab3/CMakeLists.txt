@@ -1,0 +1,1 @@
+add_executable(lab2_variant_3.cpp variant_3.cpp)
