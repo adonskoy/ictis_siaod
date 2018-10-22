@@ -1,31 +1,36 @@
-//
-// Created by Антон Донской on 06/09/2018.
-//
-
 #include <iostream>
+#include <chrono>
 
-void quickSort(int *arr, int left, int right) {
-    if (right - left + 1 > 3) {
+//using namespace std;
+using namespace std::chrono;
+size_t srav = 0, pris = 0;
+
+void quickSort(int *arr, int left, int right, int parts = 1) {
+    if (right - left + 1 > parts) {
         int i = left, j = right;
         int tmp;
         int pivot = arr[(left + right) / 2];
 
-        /* partition */
         while (i <= j) {
-            while (arr[i] < pivot)
+            while (arr[i] < pivot) {
                 i++;
-            while (arr[j] > pivot)
+                srav++;
+            }
+            while (arr[j] > pivot) {
                 j--;
+                srav++;
+            }
             if (i <= j) {
+//                std::cout << arr[i] << " " << arr[j] << std::endl;
                 tmp = arr[i];
                 arr[i] = arr[j];
                 arr[j] = tmp;
                 i++;
                 j--;
+                pris += 2;
             }
         };
 
-        /* recursion */
         if (left < j)
             quickSort(arr, left, j);
         if (i < right)
@@ -33,44 +38,43 @@ void quickSort(int *arr, int left, int right) {
     }
 }
 
+void bubbleSort(int *arr, int left, int right, int repeats = NULL) {
+    int size = right - left + 1;
+    if (!repeats) {
+        repeats = size;
+    }
+    for (int j(0); j < repeats; ++j) {
+        for (int i = 0; i < size - 1; i++) {
+            srav++;
+            if (arr[i] > arr[i + 1]) {
+                std::swap(arr[i], arr[i + 1]);
+                pris++;
+
+            }
+        }
+    }
+}
+
+void quick_with_bubble(int *arr, int left, int right) {
+    int parts = 3;
+    quickSort(arr, left, right, parts);
+    bubbleSort(arr, left, right, parts - 1);
+}
 
 int main() {
-
-    int n;
-    std::cin >> n;
+    int n = 100000;
     int *a = new int[n];
     for (int i(0); i < n; ++i) {
-        std::cin >> a[i];
+        a[i] = 0 + (random() % static_cast<int>(1000 - 0 + 1));
     }
 
-    quickSort(a, 0, n - 1);
-
-    for (int i(0); i < n; ++i) {
-        std::cout << a[i] << " ";
-        if ((i + 1) % 3 == 0) {
-            std::cout << "| ";
-        }
-    }
-    std::cout << std::endl;
-    std::cout << std::endl;
-
-    for (int j(0); j < 2; ++j) {
-        for (int i = 0; i < n - 1; i++) {
-            if (a[i] > a[i + 1]) {
-                std::swap(a[i], a[i + 1]);
-            }
-
-        }
-        for (int i(0); i < n; ++i) {
-            std::cout << a[i] << " ";
-            if ((i + 1) % 3 == 0) {
-                std::cout << "| ";
-            }
-        }
-        std::cout << std::endl;
-    }
-
-
+    high_resolution_clock::time_point t1 = high_resolution_clock::now();
+//    bubbleSort(a, 0, n - 1);
+//    quickSort(a, 0, n - 1);
+    quick_with_bubble(a, 0, n - 1);
+    high_resolution_clock::time_point t2 = high_resolution_clock::now();
+    auto duration = duration_cast<microseconds>(t2 - t1).count();
+    std::cout << duration << " " << srav << " " << pris << std::endl;
 }
 
 
