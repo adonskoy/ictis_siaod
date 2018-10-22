@@ -11,19 +11,14 @@ public:
 
 template<class T>
 class List {
-private:
-    size_t _size;
-
 public:
     Node<T> *_head;
 
-    List() {
-        _size = 0;
-    }
+    List() = default;
 
     ~List() {
         Node<T> *current = _head;
-        while (_size) {
+        while (this->_head) {
             pop_front();
         }
     }
@@ -31,7 +26,7 @@ public:
     void push_back(T data) {
         auto *newNode = new Node<T>;
         newNode->_data = data;
-        if (_size == 0) {
+        if (this->_head == nullptr) {
             _head = newNode;
         } else {
             Node<T> *current = _head;
@@ -45,11 +40,10 @@ public:
                 current = current->_next;
             }
         }
-        _size++;
     }
 
     void pop_back() {
-        if (_size == 0) {
+        if (this->_head == nullptr) {
             throw ("Nothing to pop");
         } else {
             Node<T> *last = _head;
@@ -59,36 +53,64 @@ public:
             Node<T> *pre_last = last->_prev;
             pre_last->_next = nullptr;
             delete last;
-            _size--;
+
         }
     }
 
     void swap_front_and_back() {
-        Node<T> *first = _head;
-        Node<T> *second = first->_next;
-        Node<T> *last = _head;
-        while (last->_next != nullptr) {
-            last = last->_next;
+        int size = this->get_size();
+        if (size > 1) {
+            if (size > 3) {
+                Node<T> *first = _head;
+                Node<T> *second = first->_next;
+                Node<T> *last = _head;
+                while (last->_next != nullptr) {
+                    last = last->_next;
+                }
+                Node<T> *pre_last = last->_prev;
+
+                second->_prev = last;
+                last->_next = second;
+                last->_prev = nullptr;
+
+                pre_last->_next = first;
+                first->_prev = pre_last;
+                first->_next = nullptr;
+
+                _head = last;
+            } else if (size > 2) {
+                Node<T> *first = _head;
+                Node<T> *second = _head->_next;
+                Node<T> *last = second->_next;
+                _head = last;
+                _head->_next = second;
+                _head->_prev = nullptr;
+
+                first->_prev = second;
+                first->_next = nullptr;
+
+                second->_prev = _head;
+                second->_next = first;
+            } else {
+                Node<T> *first = _head;
+                Node<T> *last = _head->_next;
+                _head = last;
+                _head->_next = first;
+                _head->_prev = nullptr;
+
+                first->_prev = _head;
+                first->_next = nullptr;
+            }
+        } else {
+            throw ("Nothing to swap");
         }
-        Node<T> *pre_last = last->_prev;
-
-        second->_prev = last;
-        last->_next = second;
-        last->_prev = nullptr;
-
-        pre_last->_next = first;
-        first->_prev = pre_last;
-        first->_next = nullptr;
-
-        _head = last;
-
     }
 
     void pop_front() {
-        if (_size == 0) {
+        if (this->_head == nullptr) {
             throw ("Nothing to pop");
         } else {
-            if (_size == 1) {
+            if (this->_head && this->_head->_next == nullptr) {
                 delete _head;
                 _head = nullptr;
             } else {
@@ -98,8 +120,6 @@ public:
                 delete first;
                 _head = second;
             }
-            _size--;
-
         }
 
     }
@@ -107,7 +127,7 @@ public:
     void push_front(T data) {
         auto *newNode = new Node<T>;
         newNode->_data = data;
-        if (_size == 0) {
+        if (this->_head == nullptr) {
             _head = newNode;
         } else {
             Node<T> *current = _head;
@@ -115,15 +135,26 @@ public:
             current->_prev = newNode;
             _head = newNode;
         }
-        _size++;
+    }
+
+    int get_size() {
+        int size = 0;
+        Node<T> *current = _head;
+        while (current != nullptr) {
+            size++;
+            current = current->_next;
+        }
+        return size;
     }
 
     void insert(int index, T data) {
+
+        int size = this->get_size();
         if (index == 0) {
             push_front(data);
-        } else if (_size == index) {
+        } else if (size == index) {
             push_back(data);
-        } else if (index > _size) {
+        } else if (index > size) {
             throw ("Index out of range");
         } else {
             int cnt = 0;
@@ -140,8 +171,6 @@ public:
             newNode->_prev = pre;
             current->_prev = newNode;
             pre->_next = newNode;
-            _size++;
-
         }
     }
 
@@ -203,13 +232,23 @@ public:
     }
 
     static void pop_front(std::string name) {
-        lists[name].pop_front();
-        std::cout << "[INFO] Poped front element to list '" + name + "'" << std::endl;
+        try {
+            lists[name].pop_front();
+            std::cout << "[INFO] Popped front element to list '" + name + "'" << std::endl;
+        } catch (...) {
+            std::cout << "[ERROR] Can't pop from empty list" << std::endl;
+        }
+
+
     }
 
     static void pop_back(std::string name) {
-        lists[name].pop_back();
-        std::cout << "[INFO] Poped back element to list '" + name + "'" << std::endl;
+        try {
+            lists[name].pop_back();
+            std::cout << "[INFO] Popped back element to list '" + name + "'" << std::endl;
+        } catch (...) {
+            std::cout << "[ERROR] Can't pop from empty list" << std::endl;
+        }
     }
 
     static void print(std::string name) {
@@ -234,8 +273,14 @@ public:
     }
 
     static void swap_elems(std::string name) {
-        lists[name].swap_front_and_back();
-        std::cout << "[INFO] Swaped first and last elements from list '" + name + "'" << std::endl;
+        try {
+
+
+            lists[name].swap_front_and_back();
+            std::cout << "[INFO] Swapped first and last elements from list '" + name + "'" << std::endl;
+        } catch (...) {
+            std::cout << "[ERROR] Nothing to swap" << std::endl;
+        }
     }
 
 
@@ -291,17 +336,15 @@ public:
                     (!shouldExsist[command] && (lists.find(name) == lists.end()))) {
                     menu[command](name);
                 } else {
-
                     if ((shouldExsist[command] && (lists.find(name) == lists.end()))) {
-                        std::cout << "[ERROR] List with name '" + name + "' doesn't exsist" << std::endl;
+                        std::cout << "[ERROR] List with name '" + name + "' doesn't exist" << std::endl;
                     } else if (!shouldExsist[command] && (lists.find(name) != lists.end())) {
-                        std::cout << "[ERROR] List with name '" + name + "' already exsist" << std::endl;
+                        std::cout << "[ERROR] List with name '" + name + "' already exist" << std::endl;
                     }
-
                 }
 
             } else {
-                std::cout << "Uknown command\n";
+                std::cout << "Unknown command\n";
                 std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
                 continue;
             }
