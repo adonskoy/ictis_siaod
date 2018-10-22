@@ -1,6 +1,7 @@
 #include <iostream>
 #include <map>
 
+//Класс нода
 template<class T>
 class Node {
 public:
@@ -9,6 +10,7 @@ public:
     T _data;
 };
 
+//Класс двусвязного списка
 template<class T>
 class List {
 public:
@@ -23,6 +25,7 @@ public:
         }
     }
 
+    //Добавляем элемент в конец списка
     void push_back(T data) {
         auto *newNode = new Node<T>;
         newNode->_data = data;
@@ -42,6 +45,7 @@ public:
         }
     }
 
+    //Удаляем элемент из конца списка
     void pop_back() {
         if (this->_head == nullptr) {
             throw ("Nothing to pop");
@@ -57,6 +61,7 @@ public:
         }
     }
 
+    //Меняем местами 1 и последний элемент списка
     void swap_front_and_back() {
         int size = this->get_size();
         if (size > 1) {
@@ -106,6 +111,7 @@ public:
         }
     }
 
+    //Удаляем один элемент с начала списка
     void pop_front() {
         if (this->_head == nullptr) {
             throw ("Nothing to pop");
@@ -124,6 +130,7 @@ public:
 
     }
 
+    //Добавляем элемент в начало списка
     void push_front(T data) {
         auto *newNode = new Node<T>;
         newNode->_data = data;
@@ -137,6 +144,7 @@ public:
         }
     }
 
+    //Размер списка
     int get_size() {
         int size = 0;
         Node<T> *current = _head;
@@ -147,6 +155,7 @@ public:
         return size;
     }
 
+    //Вставить элемент на указанную позицию
     void insert(int index, T data) {
 
         int size = this->get_size();
@@ -174,6 +183,7 @@ public:
         }
     }
 
+    //Вывести список на экран
     void print() {
 
         Node<T> *current = _head;
@@ -203,7 +213,7 @@ std::map<std::string, List<int> > lists;
 std::map<std::string, void (*)(std::string)> menu;
 std::map<std::string, bool> shouldExsist;
 
-
+//Класс, реализующий меню для работы со списками
 class Menu {
 
 public:
